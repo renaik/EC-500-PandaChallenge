@@ -14,7 +14,8 @@ As a part of our EC500 Medical Imaging with AI course, we attempt to solve the t
 
 
 ## Usage
-
+To train the GTP model, simply run 
+```./scripts/model_train.sh```
 
 ## Data
 Details of the dataset used for the PANDA challenge can be found [here](https://www.kaggle.com/c/prostate-cancer-grade-assessment/data).
