@@ -1,0 +1,49 @@
+Hi! Below are my notes on changing the parameters of the whole model when building the workflow. 
+There is a run.py serving as an entrance for each stage. Read the usages in each file and try to run the model on your end!
+Feel free to ask me anything! We do need your effort to build a satisfying model! 
+
+
+* 1: Tile WSIs
+
+Set -M to 1
+
+
+* 2: Train a patch feature extractor
+
+Set batch_size to 32 in config.yaml
+    We have 398 patches of the minisample. 
+Set weight_decay to 10e-5
+Throw apex away in simclr.py since it is not used
+Discard the 20x magnification in run.py
+    We haven't made use of magnification in stage 1, though I have no idea whether they are related. 
+
+
+* 3: Construct graphs
+
+Set :arg batch_size to 16 in build_graphs.py, half of the value we used before
+Set :arg magnification to 1x
+    Honestly I'm worried about the overall influence of magnification from different stages. 
+    To deal with the file reading issues several lines of code have been added. Please review the new if branch at line 103 to ensure you understand the changes in the path. 
+Set :arg num_classes to 512 to match the size from the checkpoint
+    Honestly I don't know why they set it to 512 before.
+Add CPU ver in build_graphs.py by changing .cuda() and .load()
+
+
+* 4: Train and test the graph transformer
+
+Add ISUP grade mapping in utils/dataset.py
+Change both graphs and labels reading logic in utils/dataset.py
+Add a Python script to extract image IDs and labels into text files. 
+    train_set.txt and val_set.txt are saved under the graphs directory. 
+Change the arguments in 4_train.sh accordingly:
+    - n_class 6
+    - data_path "./graphs"
+    - train_set "./graphs/train_set.txt" \
+    - val_set "./graphs/val_set.txt"
+    - task_name "GTP"
+    - batch_size 2
+    Other hyperparameters (e.g., num_epochs and lr) can also be modified in option.py. 
+Change the arguments in 4_test.sh in the same way above
+Add CPU ver in main.py, gcn.py and helper.py
+Change num_workers to 0 in data loaders at Lines 49 & 56 in main.py
+    This is a naive solution to solve a runtime error on my Macbook, but I do hope we can make multi-processing procedures work on SCC.  
