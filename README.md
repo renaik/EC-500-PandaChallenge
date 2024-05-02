@@ -7,7 +7,6 @@ As a part of our EC500 Medical Imaging with AI course, we attempt to solve the t
 - [Usage](#usage)
 - [Data](#data)
 - [Model Architecture](#model-architecture)
-- [Training](#training)
 - [Evaluation & Results](#evaluation--results)
 
 ## Installation
@@ -39,7 +38,7 @@ Below is the workflow we have made:
 |     **Graph Construction**     | Grouped patches and a pre-trained feature extractor |    Graph representation of each WSI    |
 |    **Transformer Training**    |  Feature node matrix, adjacency matrix, and labels  |     6-class ISUP grade predictions     |
 
-## Training
-
-
 ## Evaluation & Results
+ISUP predictions will be evaluated using the QWK score, which measures the agreement between two outcomes. This metric ranges from 0 (indicating random agreement) to 1 (signifying complete agreement) and can fall below 0 if the agreement is less than expected. The table below presents the ablation study on model hyperparameters for various configurations tested along with their corresponding QWK scores.
+
+![result.png](asset/result.png)
